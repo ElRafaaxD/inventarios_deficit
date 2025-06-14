@@ -5,6 +5,7 @@ package Modelos;
  * @author miguelLlano
  */
 public class Deficit {
+
     private int id;
     private String nombre;
     private float demanda_anual;            // D
@@ -35,19 +36,23 @@ public class Deficit {
         this.deficit = deficit;
     }
 
-    /** Cálculo del tamaño óptimo de lote Q **/
+    /**
+     * Cálculo del tamaño óptimo de lote Q *
+     */
     public float Q() {
         if (deficit) {
             // Con déficit
-            return (float) Math.sqrt((2 * demanda_anual * costo_por_Pedido * (costo_mantenimiento + costo_por_unidad_faltante)) / 
-                                     (costo_mantenimiento * costo_por_unidad_faltante));
+            return (float) Math.sqrt((2 * demanda_anual * costo_por_Pedido * (costo_mantenimiento + costo_por_unidad_faltante))
+                    / (costo_mantenimiento * costo_por_unidad_faltante));
         } else {
             // Sin déficit
             return (float) Math.sqrt((2 * demanda_anual * costo_por_Pedido) / costo_mantenimiento);
         }
     }
 
-    /** Costo total **/
+    /**
+     * Costo total *
+     */
     public float CT() {
         float Q = Q();
         if (deficit) {
@@ -62,23 +67,35 @@ public class Deficit {
         }
     }
 
-    /** Punto de reorden S (solo con déficit) **/
+    /**
+     * Punto de reorden S (solo con déficit) *
+     */
     public float S() {
-        if (!deficit) return 0;
+        if (!deficit) {
+            return 0;
+        }
         float Q = Q();
         return (Q * costo_mantenimiento) / (costo_mantenimiento + costo_por_unidad_faltante);
     }
 
-    /** Nivel máximo de inventario N (solo con déficit) **/
+    /**
+     * Nivel máximo de inventario N (solo con déficit) *
+     */
     public float N() {
-        if (!deficit) return 0;
+        if (!deficit) {
+            return 0;
+        }
         float Q = Q();
         return Q - S();
     }
 
-    /** Tiempo entre pedidos T (solo con déficit) **/
+    /**
+     * Tiempo entre pedidos T (solo con déficit) *
+     */
     public float T() {
-        if (!deficit) return 0;
+        if (!deficit) {
+            return 0;
+        }
         float Q = Q();
         return Q / demanda_anual;
     }
