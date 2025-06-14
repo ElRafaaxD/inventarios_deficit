@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package Modelos;
 
 /**
@@ -11,23 +7,14 @@ package Modelos;
 public class Deficit {
     private int id;
     private String nombre;
-    private float demanda_anual;            //D
-    private float costo_por_Pedido;         //S
-    private float costo_mantenimiento;      //H
-    private float costo_por_unidad_faltante;//C (solo con deficit)
-    //si es con (true) o sin (false) deficit
-    private boolean deficit;
+    private float demanda_anual;            // D
+    private float costo_por_Pedido;         // S
+    private float costo_mantenimiento;      // H
+    private float costo_por_unidad_faltante; // C
+    private boolean deficit;                // true = con déficit
 
-    //para extraer desde la db
-    public Deficit(
-        int id, 
-        String nombre, 
-        float demanda_anual, 
-        float costo_por_Pedido, 
-        float costo_mantenimiento, 
-        float costo_por_unidad_faltante, 
-        boolean deficit) {
-        
+    // Constructor desde base de datos
+    public Deficit(int id, String nombre, float demanda_anual, float costo_por_Pedido, float costo_mantenimiento, float costo_por_unidad_faltante, boolean deficit) {
         this.id = id;
         this.nombre = nombre;
         this.demanda_anual = demanda_anual;
@@ -36,16 +23,9 @@ public class Deficit {
         this.costo_por_unidad_faltante = costo_por_unidad_faltante;
         this.deficit = deficit;
     }
-    
-    //para agregar deficit a la db
-    public Deficit(
-        String nombre, 
-        float demanda_anual, 
-        float costo_por_Pedido, 
-        float costo_mantenimiento, 
-        float costo_por_unidad_faltante, 
-        boolean deficit) {
-        
+
+    // Constructor para insertar en base de datos
+    public Deficit(String nombre, float demanda_anual, float costo_por_Pedido, float costo_mantenimiento, float costo_por_unidad_faltante, boolean deficit) {
         this.id = -1;
         this.nombre = nombre;
         this.demanda_anual = demanda_anual;
@@ -54,47 +34,56 @@ public class Deficit {
         this.costo_por_unidad_faltante = costo_por_unidad_faltante;
         this.deficit = deficit;
     }
-    
-    /*logica para caulcuar deficit*/
-    
+
+    /** Cálculo del tamaño óptimo de lote Q **/
     public float Q() {
-        //agrega la logica toñito (que devuelva Q)
-        
-        return 0;
-    }
-    
-    public float CT() {
-        //agrega la logica toñito (que devuelva CT)
-        
-        return 0;
-    }
-    
-    //con deficit
-    public float S() {
-        if(this.deficit) return 0;
-        
-        //agrega la logica toñito (que devuelva S)
-        
-        return 0;
-    }
-    
-    //sin deficit
-    public float N() {
-        if(!this.deficit) return 0;
-        
-        //agrega la logica toñito (que devuelva n)
-        
-        return 0;
-    }
-    
-    public float T() {
-        if(!this.deficit) return 0;
-        
-        //agrega la logica toñito (que devuelva T)
-        return 0;
+        if (deficit) {
+            // Con déficit
+            return (float) Math.sqrt((2 * demanda_anual * costo_por_Pedido * (costo_mantenimiento + costo_por_unidad_faltante)) / 
+                                     (costo_mantenimiento * costo_por_unidad_faltante));
+        } else {
+            // Sin déficit
+            return (float) Math.sqrt((2 * demanda_anual * costo_por_Pedido) / costo_mantenimiento);
+        }
     }
 
-    /*Getters*/
+    /** Costo total **/
+    public float CT() {
+        float Q = Q();
+        if (deficit) {
+            float S = S();
+            float N = Q - S;
+            float term1 = (demanda_anual * costo_por_Pedido) / Q;
+            float term2 = (float) ((Math.pow(N, 2) * costo_mantenimiento) / (2 * Q));
+            float term3 = (float) ((Math.pow(S, 2) * costo_por_unidad_faltante) / (2 * Q));
+            return term1 + term2 + term3;
+        } else {
+            return (demanda_anual * costo_por_Pedido) / Q + (Q * costo_mantenimiento) / 2;
+        }
+    }
+
+    /** Punto de reorden S (solo con déficit) **/
+    public float S() {
+        if (!deficit) return 0;
+        float Q = Q();
+        return (Q * costo_mantenimiento) / (costo_mantenimiento + costo_por_unidad_faltante);
+    }
+
+    /** Nivel máximo de inventario N (solo con déficit) **/
+    public float N() {
+        if (!deficit) return 0;
+        float Q = Q();
+        return Q - S();
+    }
+
+    /** Tiempo entre pedidos T (solo con déficit) **/
+    public float T() {
+        if (!deficit) return 0;
+        float Q = Q();
+        return Q / demanda_anual;
+    }
+
+    /* Getters */
     public int getId() {
         return id;
     }
@@ -118,10 +107,8 @@ public class Deficit {
     public float getCosto_por_unidad_faltante() {
         return costo_por_unidad_faltante;
     }
-    
+
     public boolean is_deficit() {
         return deficit;
     }
-    
-    
 }

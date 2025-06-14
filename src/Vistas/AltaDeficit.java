@@ -6,7 +6,7 @@ import Modelos.Deficit;
 public class AltaDeficit extends javax.swing.JPanel {
 
     AltaDeficitControlador controlador;
-            
+
     public AltaDeficit() {
         initComponents();
         iniciarMisComponentes();
@@ -17,19 +17,39 @@ public class AltaDeficit extends javax.swing.JPanel {
         btnGpDeficit.add(rbConDeficit);
         btnGpDeficit.add(rbSinDeficit);
     }
-    
+
     public void setControllador(AltaDeficitControlador controlador) {
         this.controlador = controlador;
     }
-    
+
     public Deficit obtenerDeficitFormulario() {
-        Deficit nuevoDeficit = null;
-        
-        //agrega la logic, del formulario obtener los datos y crear un objeto
-        //osea agrega el deficit y devuelvelo
-        
-        return nuevoDeficit;
+        try {
+            String nombre = txtNombreProducto.getText().trim();
+            float demandaAnual = Float.parseFloat(txtDemandaAnual.getText().trim());
+            float costoPorPedido = Float.parseFloat(txtCostoPorPedido.getText().trim());
+            float costoMantenimiento = Float.parseFloat(txtCostoMantenimiento.getText().trim());
+            float costoPorUnidadFaltante = Float.parseFloat(txtCostoPorUnidadFaltante.getText().trim());
+            boolean conDeficit = rbConDeficit.isSelected();
+
+            // Si está seleccionado sin déficit, el costo por unidad faltante debe ser 0
+            if (!conDeficit) {
+                costoPorUnidadFaltante = 0;
+            }
+
+            return new Deficit(
+                    nombre,
+                    demandaAnual,
+                    costoPorPedido,
+                    costoMantenimiento,
+                    costoPorUnidadFaltante,
+                    conDeficit
+            );
+        } catch (NumberFormatException ex) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Error: Verifica que todos los campos numéricos contengan valores válidos.", "Error de formato", javax.swing.JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
