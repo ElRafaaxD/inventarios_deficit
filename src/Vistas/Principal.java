@@ -1,35 +1,49 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package Vistas;
 
 import Controladores.AltaDeficitControlador;
+import Controladores.MostrarDeficitControlador;
 import DAOS.DeficitDAO;
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.util.Locale;
+import java.awt.Font;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 
-/**
- *
- * @author miguelLlano
- */
 public class Principal extends javax.swing.JFrame {
 
-    /**
-     * Creates new form Principal
-     */
     public Principal() {
         initComponents();
+        this.setTitle("Inventarios");
         pnl_principal.setBackground(Color.WHITE);
-        iniciarVistaAgregarDeificit();
         
+        Font fuenteGrande = new Font("Arial", Font.PLAIN, 20);
+        // Aplicar la fuente al JMenuBar
+        mnbMenuPrincipal.setFont(fuenteGrande);
+        mnbMenuPrincipal.setBackground(Color.WHITE);
+        mnbMenuPrincipal.setOpaque(true);
+        mnbMenuPrincipal.setBorderPainted(false);
+
+        // Si ya tienes menús dentro, también debes cambiarles la fuente
+        for (int i = 0; i < mnbMenuPrincipal.getMenuCount(); i++) {
+            JMenu menu = mnbMenuPrincipal.getMenu(i);
+            if (menu != null) {
+                menu.setFont(fuenteGrande);
+                for (int j = 0; j < menu.getItemCount(); j++) {
+                    JMenuItem item = menu.getItem(j);
+                    if (item != null) {
+                        item.setFont(fuenteGrande);
+                    }
+                }
+            }
+        }
         
+        //iniciarVistaAgregarDeificit();
+        iniciarVistaMostrarDeificit();
     }
 
-    public void agregarPanel(JPanel nuevoPanel) {
-        nuevoPanel.setSize(800, 600);
+    private void agregarPanel(JPanel nuevoPanel) {
+        nuevoPanel.setSize(1000, 600);
         nuevoPanel.setLocation(0, 0);
         
         pnl_principal.removeAll();
@@ -38,6 +52,9 @@ public class Principal extends javax.swing.JFrame {
         pnl_principal.repaint();
     }
     
+    /*
+    * funcion para mandar a llamar la vista de agregar deficit (nuevo deficit)
+    */
     public void iniciarVistaAgregarDeificit() {
         AltaDeficit vistaAltaDeficit = new AltaDeficit();
         DeficitDAO deficitDAO = new DeficitDAO();
@@ -50,12 +67,48 @@ public class Principal extends javax.swing.JFrame {
         //agrega la vista al panel
         agregarPanel(vistaAltaDeficit);
     }
+    
+    /*
+    * funcion para mandar a llamar la vista de editar deficit (editar deficit)
+    */
+    public void iniciarVistaAgregarDeificit(int id_deficit) {
+        AltaDeficit vistaAltaDeficit = new AltaDeficit();
+        DeficitDAO deficitDAO = new DeficitDAO();
+        AltaDeficitControlador altaDecitiControlador = new AltaDeficitControlador(
+            vistaAltaDeficit, 
+            deficitDAO,
+            id_deficit
+        );
+        
+        vistaAltaDeficit.setControllador(altaDecitiControlador);
+        //agrega la vista al panel
+        agregarPanel(vistaAltaDeficit);
+    }
+    
+    /*
+    * funcion para mandar a llamar la vista de mostrar deficits
+    */
+    public void iniciarVistaMostrarDeificit() {
+        MostarDeficit vistaMostrarDeficit = new MostarDeficit();
+        DeficitDAO deficitDAO = new DeficitDAO();
+        MostrarDeficitControlador MostrarDeficitControlador = new MostrarDeficitControlador(
+            vistaMostrarDeficit, 
+            deficitDAO
+        );
+        
+        vistaMostrarDeficit.setControllador(MostrarDeficitControlador);
+        //agrega la vista al panel
+        agregarPanel(vistaMostrarDeficit);
+        
+    }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         pnl_principal = new javax.swing.JPanel();
+        mnbMenuPrincipal = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -63,12 +116,21 @@ public class Principal extends javax.swing.JFrame {
         pnl_principal.setLayout(pnl_principalLayout);
         pnl_principalLayout.setHorizontalGroup(
             pnl_principalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 800, Short.MAX_VALUE)
+            .addGap(0, 1000, Short.MAX_VALUE)
         );
         pnl_principalLayout.setVerticalGroup(
             pnl_principalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 600, Short.MAX_VALUE)
+            .addGap(0, 558, Short.MAX_VALUE)
         );
+
+        mnbMenuPrincipal.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        mnbMenuPrincipal.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        mnbMenuPrincipal.setMargin(new java.awt.Insets(5, 5, 5, 5));
+
+        jMenu1.setText("Menu");
+        mnbMenuPrincipal.add(jMenu1);
+
+        setJMenuBar(mnbMenuPrincipal);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -78,13 +140,15 @@ public class Principal extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnl_principal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(pnl_principal, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenuBar mnbMenuPrincipal;
     private javax.swing.JPanel pnl_principal;
     // End of variables declaration//GEN-END:variables
 }

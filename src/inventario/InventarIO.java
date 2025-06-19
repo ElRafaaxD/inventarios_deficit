@@ -1,8 +1,6 @@
 package inventario;
 
-import DAOS.Conexion;
 import Vistas.Principal;
-import com.sun.jdi.connect.spi.Connection;
 
 public class InventarIO {
 

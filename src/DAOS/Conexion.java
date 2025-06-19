@@ -6,7 +6,6 @@ package DAOS;
 
 import java.sql.*;
 
-
 /**
  *
  * @author miguelLlano
@@ -56,6 +55,11 @@ public class Conexion {
         return stmt.executeQuery();
     }
 
+    public ResultSet ejecutarConsulta(Connection conn, String sql) throws SQLException {
+        PreparedStatement stmt = conn.prepareStatement(sql);
+        return stmt.executeQuery();
+    }
+    
     // Ejecutar INSERT, UPDATE, DELETE
     public int ejecutarActualizacion(Connection conn, String sql, Object... params) throws SQLException {
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
