@@ -2,9 +2,7 @@ package DAOS;
 
 import Modelos.Deficit;
 import Modelos.DeficitResultado;
-
 import java.util.List;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collections;
