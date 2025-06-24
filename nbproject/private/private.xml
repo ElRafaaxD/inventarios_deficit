@@ -2,6 +2,15 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/C:/Users/jantr/OneDrive/Documentos/GitHub/inventarios_deficit/src/Controladores/MostrarDeficitControlador.java</file>
+            <file>file:/C:/Users/jantr/OneDrive/Documentos/GitHub/inventarios_deficit/src/Controladores/AltaDeficitControlador.java</file>
+            <file>file:/C:/Users/jantr/OneDrive/Documentos/GitHub/inventarios_deficit/src/Vistas/AltaDeficit.java</file>
+            <file>file:/C:/Users/jantr/OneDrive/Documentos/GitHub/inventarios_deficit/src/Vistas/PanelPrincipal.java</file>
+            <file>file:/C:/Users/jantr/OneDrive/Documentos/GitHub/inventarios_deficit/src/Vistas/MostrarDeficit.java</file>
+            <file>file:/C:/Users/jantr/OneDrive/Documentos/GitHub/inventarios_deficit/src/Vistas/Principal.java</file>
+            <file>file:/C:/Users/jantr/OneDrive/Documentos/GitHub/inventarios_deficit/src/DAOS/Conexion.java</file>
+            <file>file:/C:/Users/jantr/OneDrive/Documentos/GitHub/inventarios_deficit/src/inventario/InventarIO.java</file>
+        </group>
     </open-files>
 </project-private>

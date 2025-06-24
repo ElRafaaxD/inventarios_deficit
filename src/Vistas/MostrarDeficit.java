@@ -1,14 +1,10 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
- */
 package Vistas;
 
 import javax.swing.*;
 import java.util.List;
 import Modelos.DeficitResultado;
-import Controladores.MostrarDeficitControlador;
-import DAOS.DeficitDAO;
+import Controladores.MostrarDeficitControlador; // Todavía se usa para cargar datos inicialmente
+import DAOS.DeficitDAO; // Puede que ya no necesites importarlo aquí si el controlador se encarga de la carga
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 
@@ -18,6 +14,8 @@ import javax.swing.table.TableRowSorter;
  */
 public class MostrarDeficit extends PanelPrincipal {
 
+    // Ya no necesitamos esta variable para obtener el ID en el doble clic,
+    // pero se mantiene si el controlador sigue siendo responsable de cargar los datos inicialmente.
     private MostrarDeficitControlador mostrarDeficitControlador;
 
     // Constructor principal
@@ -27,7 +25,7 @@ public class MostrarDeficit extends PanelPrincipal {
         iniciarMisComponentes();  // inicializas eventos y demás
     }
 
-// Método nuevo para definir el modelo de la tabla
+    // Método nuevo para definir el modelo de la tabla
     private void configurarModeloTabla() {
         String[] columnas = {
             "ID", "Nombre", "Demanda Anual", "Costo Pedido", "Costo Mantenimiento",
@@ -37,13 +35,20 @@ public class MostrarDeficit extends PanelPrincipal {
         Tabla.setModel(modelo);
     }
 
-    // Asigna el controlador desde la clase Principal
+    // Asigna el controlador desde la clase Principal.
+    // Esto se mantiene si el controlador es quien carga los datos inicialmente.
     public void setControllador(MostrarDeficitControlador mostrarDeficitControlador) {
         this.mostrarDeficitControlador = mostrarDeficitControlador;
-        mostrarDeficitControlador.cargarDeficitsEnTabla(Tabla);
+        // Solo carga los datos aquí si el controlador es quien maneja eso.
+        // Si no, esta línea se podría mover a otro lugar o eliminar.
+        if (mostrarDeficitControlador != null) {
+            mostrarDeficitControlador.cargarDeficitsEnTabla(Tabla);
+        } else {
+            System.out.println("Advertencia: El controlador no fue asignado a MostrarDeficit para cargar la tabla.");
+        }
     }
 
-    // Permite al controlador acceder a la tabla
+    // Permite al controlador acceder a la tabla (todavía útil si el controlador carga los datos)
     public JTable getTablaDeficit() {
         return Tabla;
     }
@@ -92,38 +97,57 @@ public class MostrarDeficit extends PanelPrincipal {
         sorter.setRowFilter(filtroAplicado);
     }
 
-    // Inicializa eventos de botones u otros componentes
-    public void iniciarMisComponentes() {
+// En Vistas.MostrarDeficit.iniciarMisComponentes()
+    // En Vistas.MostrarDeficit
+public void iniciarMisComponentes() {
+    // Configurar filtro ComboBox y campo búsqueda
+    cbbFiltrar.addActionListener(e -> aplicarFiltro());
+    txtBuscador.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
+        @Override
+        public void insertUpdate(javax.swing.event.DocumentEvent e) {
+            aplicarFiltro();
+        }
 
-        // Ya no usamos exportar Excel, así que lo dejamos comentado o puedes quitarlo del diseño
-        // this.btnExportarExcel.addActionListener(e -> {
-        //     mostrarDeficitControlador.exportarExcel();
-        // });
-        // Filtro en el ComboBox
-        cbbFiltrar.addActionListener(e -> aplicarFiltro());
+        @Override
+        public void removeUpdate(javax.swing.event.DocumentEvent e) {
+            aplicarFiltro();
+        }
 
-// Filtro en el campo de búsqueda
-        txtBuscador.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
-            public void insertUpdate(javax.swing.event.DocumentEvent e) {
-                aplicarFiltro();
-            }
+        @Override
+        public void changedUpdate(javax.swing.event.DocumentEvent e) {
+            aplicarFiltro();
+        }
+    });
 
-            public void removeUpdate(javax.swing.event.DocumentEvent e) {
-                aplicarFiltro();
-            }
+    // Listener para detectar CLIC SIMPLE y obtener el ID directamente
+    Tabla.addMouseListener(new java.awt.event.MouseAdapter() {
+        @Override
+        public void mouseClicked(java.awt.event.MouseEvent evt) {
+            // No es necesario verificar evt.getClickCount() == 2 para clic simple
+            
+            JTable tabla = (JTable) evt.getSource();
+            int filaVisual = tabla.rowAtPoint(evt.getPoint()); // Obtiene la fila bajo el cursor
 
-            public void changedUpdate(javax.swing.event.DocumentEvent e) {
-                aplicarFiltro();
-            }
-        });
+            if (filaVisual != -1) { // Si se hizo clic en una fila válida
+                int filaModelo = tabla.convertRowIndexToModel(filaVisual);
+                Object idObject = tabla.getModel().getValueAt(filaModelo, 0);
 
-    }
+                if (idObject instanceof Integer) {
+                    int id_deficit = (int) idObject;
+                    
+                    // Llama a la ventana Principal para iniciar la vista de agregar/editar
+                    Principal padre = (Principal) SwingUtilities.getWindowAncestor(Tabla);
+                    if (padre != null) {
+                        padre.iniciarVistaAgregarDeificit(id_deficit);
+                    } 
+                    // Ya no imprimimos errores en consola para una aplicación final.
+                    // Si necesitas depurar de nuevo, puedes volver a añadir los System.out.println
+                } 
+            } 
+        }
+    });
+}
 
-    /**
-     * This method is called from within the constructor to initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is always
-     * regenerated by the Form Editor.
-     */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {

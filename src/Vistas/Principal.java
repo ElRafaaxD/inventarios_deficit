@@ -16,7 +16,7 @@ public class Principal extends javax.swing.JFrame {
         initComponents();
         this.setTitle("Inventarios");
         pnl_principal.setBackground(Color.WHITE);
-        
+
         Font fuenteGrande = new Font("Arial", Font.PLAIN, 20);
         // Aplicar la fuente al JMenuBar
         mnbMenuPrincipal.setFont(fuenteGrande);
@@ -37,7 +37,7 @@ public class Principal extends javax.swing.JFrame {
                 }
             }
         }
-        
+
         //iniciarVistaAgregarDeificit();
         iniciarVistaMostrarDeificit();
     }
@@ -45,61 +45,63 @@ public class Principal extends javax.swing.JFrame {
     private void agregarPanel(JPanel nuevoPanel) {
         nuevoPanel.setSize(1000, 600);
         nuevoPanel.setLocation(0, 0);
-        
+
         pnl_principal.removeAll();
         pnl_principal.add(nuevoPanel, BorderLayout.CENTER);
         pnl_principal.revalidate();
         pnl_principal.repaint();
     }
-    
+
     /*
     * funcion para mandar a llamar la vista de agregar deficit (nuevo deficit)
-    */
+     */
     public void iniciarVistaAgregarDeificit() {
         AltaDeficit vistaAltaDeficit = new AltaDeficit();
         DeficitDAO deficitDAO = new DeficitDAO();
         AltaDeficitControlador altaDecitiControlador = new AltaDeficitControlador(
-            vistaAltaDeficit, 
-            deficitDAO
+                vistaAltaDeficit,
+                deficitDAO
         );
-        
+
         vistaAltaDeficit.setControllador(altaDecitiControlador);
         //agrega la vista al panel
         agregarPanel(vistaAltaDeficit);
     }
-    
+
     /*
     * funcion para mandar a llamar la vista de editar deficit (editar deficit)
-    */
+     */
     public void iniciarVistaAgregarDeificit(int id_deficit) {
         AltaDeficit vistaAltaDeficit = new AltaDeficit();
         DeficitDAO deficitDAO = new DeficitDAO();
         AltaDeficitControlador altaDecitiControlador = new AltaDeficitControlador(
-            vistaAltaDeficit, 
-            deficitDAO,
-            id_deficit
+                vistaAltaDeficit,
+                deficitDAO,
+                id_deficit
         );
-        
+
         vistaAltaDeficit.setControllador(altaDecitiControlador);
         //agrega la vista al panel
         agregarPanel(vistaAltaDeficit);
     }
-    
+
     /*
     * funcion para mandar a llamar la vista de mostrar deficits
-    */
+     */
     public void iniciarVistaMostrarDeificit() {
         MostrarDeficit vistaMostrarDeficit = new MostrarDeficit();
         DeficitDAO deficitDAO = new DeficitDAO();
-        MostrarDeficitControlador MostrarDeficitControlador = new MostrarDeficitControlador(
-            vistaMostrarDeficit, 
-            deficitDAO
+        // Aquí es donde creas el controlador de MostrarDeficit.
+        // Como no le pasas 'this' (la instancia de Principal) al constructor del controlador,
+        // el controlador usará SwingUtilities.getWindowAncestor() para encontrarla.
+        MostrarDeficitControlador mostrarDeficitControlador = new MostrarDeficitControlador(
+                vistaMostrarDeficit,
+                deficitDAO
         );
-        
-        vistaMostrarDeficit.setControllador(MostrarDeficitControlador);
-        //agrega la vista al panel
+
+        vistaMostrarDeficit.setControllador(mostrarDeficitControlador);
+        // agrega la vista al panel
         agregarPanel(vistaMostrarDeficit);
-        
     }
 
     @SuppressWarnings("unchecked")

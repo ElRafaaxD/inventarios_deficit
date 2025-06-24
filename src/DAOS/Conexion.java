@@ -14,7 +14,7 @@ public class Conexion {
     // Configuracion de MySQL
     private static final String URL = "jdbc:mysql://localhost:3306/inventario";
     private static final String USUARIO = "root";
-    private static final String CONTRASENA = "123456789";
+    private static final String CONTRASENA = "root";
 
     
     // Obtener Conexion
